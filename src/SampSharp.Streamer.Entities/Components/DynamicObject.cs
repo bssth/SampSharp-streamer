@@ -149,14 +149,15 @@ namespace SampSharp.Streamer.Entities
         /// <param name="target">The dynamic object, player or vehicle.</param>
         /// <param name="offset">The offset.</param>
         /// <param name="rotation">The rotation.</param>
-        public void AttachTo(EntityId target, Vector3 offset, Vector3 rotation)
+        /// <param name="syncRotation">Synchronize rotation.</param>
+        public void AttachTo(EntityId target, Vector3 offset, Vector3 rotation, bool syncRotation = true)
         {
             if (!target.IsOfAnyType(StreamerEntities.DynamicObjectType, SampEntities.PlayerType, SampEntities.VehicleType))
                 throw new InvalidEntityArgumentException(nameof(target), StreamerEntities.DynamicObjectType, SampEntities.PlayerType, SampEntities.VehicleType);
 
             if (target.IsOfType(StreamerEntities.DynamicObjectType))
                 GetComponent<NativeDynamicObject>().AttachDynamicObjectToObject(target, offset.X, offset.Y, offset.Z,
-                    rotation.X, rotation.Y, rotation.Z);
+                    rotation.X, rotation.Y, rotation.Z, Convert.ToInt32(syncRotation));
             else if (target.IsOfType(SampEntities.PlayerType))
                 GetComponent<NativeDynamicObject>().AttachDynamicObjectToPlayer(target, offset.X, offset.Y, offset.Z,
                     rotation.X, rotation.Y, rotation.Z);
